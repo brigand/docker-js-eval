@@ -10,10 +10,10 @@ main(){
     local engine="$(get_input .engine)"
     local code="$(get_input .code)"
     if [ "$engine" == "node" ]; then
-       node -p "$code"
+       node -p "$code" 2>&1
     fi
     if [ "$engine" == "babel" ]; then
-        babel-node -p "$code"
+        babel-node -p "$code" 2>&1
     fi
 }
 
