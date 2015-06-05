@@ -16,5 +16,6 @@ COPY eval-the-code.ash ./
 RUN chmod 005 eval-the-code.ash
 USER anon
 
+ENV BABEL_CACHE_PATH /var/ws/.babel.json
 CMD ["ash", "eval-the-code.ash"]
 
