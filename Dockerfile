@@ -5,7 +5,7 @@ RUN apk update && \
   apk add nodejs jq
 
 
-RUN npm install -g babel && \
+RUN npm install -g babel@5 && \
     npm cache clean && \
     npm uninstall -g npm 
 

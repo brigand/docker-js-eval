@@ -13,12 +13,18 @@ $ echo '{"code": "invalid", "engine": "babel"}' | docker run -i js-eval
 
 ```
 
-Valid engines:
+### Valid engines
 
 - node
 - babel
 
-TODO engines:
+#### Babel
+
+You can set the BABELRC env var to a json object with your config options.
+
+### TODO engines:
+
+I'll probably never get to these, but PRs welcome.
 
 - traceur
 - spidermonkey?
