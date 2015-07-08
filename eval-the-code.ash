@@ -13,9 +13,14 @@ main(){
         if test -n "$USE_REPL"; then
             echo "$code" | node -i
         else
-            node -p "$code" 2>&1
+            node -p "$code"  2>&1
         fi
     fi
+
+    if [ "$engine" == "node-harmony" ]; then
+        node $(node --v8-options | grep harmony | awk '{print $1}') -p "$code" 2>&1
+    fi
+
     if [ "$engine" == "babel" ]; then
         if test -n "$BABELRC"; then
             echo "$BABELRC" > .babelrc
