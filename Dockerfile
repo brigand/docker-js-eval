@@ -3,7 +3,7 @@ MAINTAINER f.bagnardi@gmail.com
 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
   apk update && \
-  apk add jq iojs && \
+  apk add jq nodejs && \
   rm -rf /var/cache/apk/*
 
 
