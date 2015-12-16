@@ -22,12 +22,14 @@ main(){
     fi
 
     if [ "$engine" == "babel" ]; then
-        presets="es2015"
+        if test -n "$BABELRC"; then
+            echo "$BABELRC" > .babelrc
+        fi
 
         if test -n "$USE_REPL"; then
-            echo "$code" | babel-node --presets $presets 2>&1
+            echo "$code" | babel-node 2>&1
         else
-            babel-node --presets $presets -p "$code" 2>&1
+            babel-node -p "$code" 2>&1
         fi
     fi
 }
