@@ -7,6 +7,6 @@ if (process.argv.indexOf('--use-babel') !== -1) {
     presets: ['es2015', 'stage-1']
   }).code;
 }
-
+require('babel-polyfill');
 console.log(inspect(eval(code)));
 

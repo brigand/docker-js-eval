@@ -9,10 +9,7 @@ $base $name <<~~
 ~~
 
 $base $name <<~~
-{"code": "[1, 2, 3].forEach(::console.log)", "engine": "babel"}
+{"code": "var f = async function(){ return 1 }; f().then((x) => console.log(x)); null", "engine": "babel"}
 ~~
 
-$base -e BABELRC='{"stage":0}' $name <<~~
-{"code": "[1, 2, 3].forEach(::console.log)", "engine": "babel"}
-~~
 
