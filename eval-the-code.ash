@@ -13,7 +13,7 @@ main(){
         if test -n "$USE_REPL"; then
             echo "$code" | node -i
         else
-            node -p "$code"  2>&1
+            node eval-js.js "$code"  2>&1
         fi
     fi
 
@@ -29,7 +29,7 @@ main(){
         if test -n "$USE_REPL"; then
             echo "$code" | babel-node 2>&1
         else
-            babel-node -p "$code" 2>&1
+            node eval-js.js "$code" --use-babel 2>&1
         fi
     fi
 }
