@@ -1,0 +1,25 @@
+{
+  "name": "docker-js-eval",
+  "version": "0.1.0",
+  "description": "Run bits of js code in various JS engines, within the safety of a docker container.  See usage.sh for an example with restricted memory, cpu, and network disabled.",
+  "main": "eval-js.js",
+  "dependencies": {
+    "babel-polyfill": "^6.7.4",
+    "babel-standalone": "^6.7.4",
+    "object-inspect": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brigand/docker-js-eval.git"
+  },
+  "author": "Frankie Bagnardi <f.bagnardi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brigand/docker-js-eval/issues"
+  },
+  "homepage": "https://github.com/brigand/docker-js-eval#readme"
+}
