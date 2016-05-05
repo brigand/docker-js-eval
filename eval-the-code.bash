@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/bash
 
 INPUT="$(cat -)"
 
@@ -6,9 +6,19 @@ get_input(){
     echo "$INPUT" | jq -r "$1"
 }
 
+source ./nvm/nvm.sh
+
 main(){
     local engine="$(get_input .engine)"
     local code="$(get_input .code)"
+    local node_version="$(get_input .nodeVersion)"
+
+    if [[ "$node_version" == "null" ]]; then
+      node_version="6"
+    fi
+
+    nvm use "$node_version" >/dev/null 2>&1
+
     if [ "$engine" == "node" ]; then
         if test -n "$USE_REPL"; then
             echo "$code" | node -i

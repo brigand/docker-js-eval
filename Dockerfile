@@ -1,25 +1,22 @@
-FROM alpine:edge
+FROM ubuntu
 MAINTAINER f.bagnardi@gmail.com
 
-RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-  apk update && \
-  apk add jq nodejs && \
-  rm -rf /var/cache/apk/*
+RUN apt-get update && apt-get install -y curl jq
 
-
-RUN npm install -g babel@5 && \
-    npm cache clean && \
-    npm uninstall -g npm
-
-RUN adduser -s /bin/bash -H -D anon
-RUN mkdir /var/ws && chown -R anon:anon /var/ws
+RUN adduser --disabled-password --shell /bin/bash --home /var/ws anon
+RUN chown -R anon:anon /var/ws
 WORKDIR /var/ws
-COPY eval-the-code.ash ./
-COPY node_modules ./node_modules
+ADD ./nvm ./nvm
+RUN bash -c '. ./nvm/nvm.sh; \
+  nvm install 4; \
+  nvm install 5; \
+  nvm install 6; \
+  npm install babel-standalone babel-polyfill object-inspect'
+COPY eval-the-code.bash ./
 COPY eval-js.js ./
-RUN chmod 005 eval-the-code.ash
+RUN chmod 555 eval-the-code.bash
 USER anon
 
 ENV BABEL_CACHE_PATH /var/ws/.babel.json
-CMD ["ash", "eval-the-code.ash"]
+CMD ["bash", "eval-the-code.bash"]
 

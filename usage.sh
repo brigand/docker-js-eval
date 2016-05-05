@@ -9,6 +9,16 @@ $base $name <<~~
 ~~
 
 $base $name <<~~
+{"code": "'6 = ' + process.version", "engine": "node"}
+~~
+$base $name <<~~
+{"code": "'6 = ' + process.version", "engine": "node", "nodeVersion": "6"}
+~~
+$base $name <<~~
+{"code": "'4 = ' + process.version", "engine": "node", "nodeVersion": "4"}
+~~
+
+$base $name <<~~
 {"code": "const double = x => x*2; double(3.5)", "engine": "babel"}
 ~~
 
