@@ -5,6 +5,10 @@ name="js-eval"
 base="docker run -i --rm --net="none" -m="64m" -c="128" "
 
 $base $name <<~~
+{"code": "1/", "engine": "babel"}
+~~
+
+$base $name <<~~
 {"code": "const double = x => x*2; double(3.5)", "engine": "babel"}
 ~~
 
