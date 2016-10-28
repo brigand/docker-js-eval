@@ -11,6 +11,7 @@ RUN bash -c '. ./nvm/nvm.sh; \
   nvm install 4; \
   nvm install 5; \
   nvm install 6; \
+  nvm install 7; \
   npm install babel-standalone babel-polyfill object-inspect'
 COPY eval-the-code.bash ./
 COPY eval-js.js ./
