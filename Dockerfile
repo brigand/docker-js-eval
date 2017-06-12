@@ -8,11 +8,12 @@ RUN chown -R anon:anon /var/ws
 WORKDIR /var/ws
 ADD ./nvm ./nvm
 RUN bash -c '. ./nvm/nvm.sh; \
+  nvm install 8; \
   nvm install 4; \
   nvm install 5; \
   nvm install 6; \
   nvm install 7; \
-  npm install babel-standalone babel-polyfill object-inspect'
+  npm install babel-standalone babel-polyfill object-inspect lodash moment bluebird'
 COPY eval-the-code.bash ./
 COPY eval-js.js ./
 RUN chmod 555 eval-the-code.bash
