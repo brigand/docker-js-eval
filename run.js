@@ -1,7 +1,6 @@
 'use strict';
 
 const { Script, Module, createContext } = require('vm');
-const CJSModule = require('module');
 const util = require('util');
 const { decorateErrorStack } = require('internal/util');
 
@@ -19,7 +18,6 @@ const inspect = (val) => {
   try {
     return util.inspect(val, {
       maxArrayLength: 20,
-      customInspect: false,
       colors: false,
       breakLength: 60,
       compact: false,
