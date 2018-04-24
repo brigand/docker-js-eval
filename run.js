@@ -4,10 +4,9 @@ const { Script, Module, createContext } = require('vm');
 const util = require('util');
 const { decorateErrorStack } = require('internal/util');
 
-const { environment, code } = JSON.parse(process.argv[2]);
+const { environment, code, timeout } = JSON.parse(process.argv[2]);
 
 const FILENAME = 'ecmabot.js';
-const TIMEOUT = 5000;
 
 const createNewContext = () => {
   const O = Object.create(null);
@@ -18,6 +17,7 @@ const inspect = (val) => {
   try {
     return util.inspect(val, {
       maxArrayLength: 20,
+      breakLength: 9999,
       colors: false,
       compact: false,
     });
@@ -35,7 +35,7 @@ const inspect = (val) => {
       if (mode === 'cjs') {
         const script = new Script(code, {
           filename: FILENAME,
-          timeout: TIMEOUT,
+          timeout,
           displayErrors: true,
         });
         global.module = module;
@@ -54,11 +54,11 @@ const inspect = (val) => {
       });
       await module.link(async () => { throw new Error('Unable to resolve import'); });
       module.instantiate();
-      ({ result } = await module.evaluate({ timeout: TIMEOUT }));
+      ({ result } = await module.evaluate({ timeout }));
     } else if (environment === 'script') {
       const script = new Script(code, {
         filename: FILENAME,
-        timeout: TIMEOUT,
+        timeout,
         displayErrors: true,
       });
       result = script.runInContext(createNewContext());
