@@ -19,7 +19,6 @@ const inspect = (val) => {
     return util.inspect(val, {
       maxArrayLength: 20,
       colors: false,
-      breakLength: 60,
       compact: false,
     });
   } catch (err) {
