@@ -1,6 +1,14 @@
 #!/bin/sh
 
 node \
+  --harmony-bigint \
+  --harmony-class-fields \
+  --harmony-private-fields \
+  --harmony-static-fields \
+  --harmony-public-fields \
+  --harmony-subsume-json \
+  --harmony-regexp-named-captures \
+  --harmony-do-expressions \
   --experimental-vm-modules \
   --experimental-modules \
   --expose-internals \
