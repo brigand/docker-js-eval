@@ -14,7 +14,7 @@ main(){
     local node_version="$(get_input .nodeVersion)"
 
     if [[ "$node_version" == "null" ]]; then
-      node_version="8"
+      node_version="10"
     fi
 
     nvm use "$node_version" >/dev/null 2>&1
