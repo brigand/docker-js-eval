@@ -1,0 +1,16 @@
+{
+  "name": "docker-js-eval",
+  "version": "0.0.1",
+  "description": "Evaluate JS in a Docker container",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devsnek/docker-js-eval.git"
+  },
+  "author": "snek <me@gus.host>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devsnek/docker-js-eval/issues"
+  },
+  "homepage": "https://github.com/devsnek/docker-js-eval#readme"
+}
