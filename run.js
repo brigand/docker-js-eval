@@ -2,11 +2,34 @@
 
 const { Script, Module, createContext } = require('vm');
 const util = require('util');
-const { decorateErrorStack } = require('internal/util');
+
+const {
+  getHiddenValue,
+  setHiddenValue,
+  arrow_message_private_symbol: kArrowMessagePrivateSymbolIndex,
+  decorated_private_symbol: kDecoratedPrivateSymbolIndex,
+} = process.binding('util');
+const { toString: ObjectToString } = Object.prototype;
 
 const { environment, code, timeout } = JSON.parse(process.argv[2]);
 
 const FILENAME = 'ecmabot.js';
+
+const isError = (e) => ObjectToString.call(e) === '[object Error]' || e instanceof Error;
+
+const decorateErrorStack = (err) => {
+  if (!(isError(err) && err.stack) ||
+      getHiddenValue(err, kDecoratedPrivateSymbolIndex) === true) {
+    return;
+  }
+
+  const arrow = getHiddenValue(err, kArrowMessagePrivateSymbolIndex);
+
+  if (arrow) {
+    err.stack = arrow + err.stack;
+    setHiddenValue(err, kDecoratedPrivateSymbolIndex, true);
+  }
+};
 
 const createNewContext = () => {
   const O = Object.create(null);
@@ -52,7 +75,9 @@ const inspect = (val) => {
         url: `vm:${FILENAME}`,
         context: createNewContext(),
       });
-      await module.link(async () => { throw new Error('Unable to resolve import'); });
+      await module.link(async () => {
+        throw new Error('Unable to resolve import');
+      });
       module.instantiate();
       ({ result } = await module.evaluate({ timeout }));
     } else if (environment === 'script') {
