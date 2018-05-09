@@ -1,6 +1,6 @@
 {
   "name": "docker-js-eval",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Evaluate JS in a Docker container",
   "main": "index.js",
   "repository": {

@@ -4,13 +4,12 @@ const cp = require('child_process');
 const crypto = require('crypto');
 
 const CONTAINER = 'devsnek/js-eval';
-const ARGS = ['run', '--rm', '-i', '--net=none', '--cpus=0.5'];
 
 module.exports = (code, environment, { timeout, cpus, memory, net = 'none' } = {}) =>
   new Promise((resolve, reject) => {
     const name = `jseval-${crypto.randomBytes(8).toString('hex')}`;
 
-    const args = ARGS.slice(0).concat([`--name=${name}`, `--net=${net}`]);
+    const args = ['run', '--rm', '-i', `--name=${name}`, `--net=${net}`];
     if (cpus) {
       args.push(`--cpus=${cpus}`);
     }
