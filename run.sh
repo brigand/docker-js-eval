@@ -6,7 +6,6 @@ node \
   --harmony-private-fields \
   --harmony-static-fields \
   --harmony-public-fields \
-  --harmony-subsume-json \
   --harmony-regexp-named-captures \
   --harmony-do-expressions \
   --experimental-vm-modules \

@@ -12,5 +12,6 @@
   "bugs": {
     "url": "https://github.com/devsnek/docker-js-eval/issues"
   },
-  "homepage": "https://github.com/devsnek/docker-js-eval#readme"
+  "homepage": "https://github.com/devsnek/docker-js-eval#readme",
+  "dependencies": {}
 }

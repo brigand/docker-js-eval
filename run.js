@@ -1,6 +1,6 @@
 'use strict';
 
-const { Script, Module, createContext } = require('vm');
+const { Script, SourceTextModule, createContext } = require('vm');
 const util = require('util');
 
 const {
@@ -71,7 +71,7 @@ const inspect = (val) => {
         // esm
       }
     } else if (environment === 'module') {
-      const module = new Module(code, {
+      const module = new SourceTextModule(code, {
         url: `vm:${FILENAME}`,
         context: createNewContext(),
       });
