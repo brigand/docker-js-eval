@@ -10,4 +10,3 @@ RUN chmod 555 run.sh
 USER anon
 
 CMD ["sh", "run.sh"]
-

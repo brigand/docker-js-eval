@@ -2,6 +2,7 @@
 
 const { Script, SourceTextModule, createContext } = require('vm');
 const util = require('util');
+const fs = require('fs');
 
 const {
   getHiddenValue,
@@ -11,15 +12,13 @@ const {
 } = process.binding('util');
 const { toString: ObjectToString } = Object.prototype;
 
-const { environment, code, timeout } = JSON.parse(process.argv[2]);
-
 const FILENAME = 'ecmabot.js';
 
 const isError = (e) => ObjectToString.call(e) === '[object Error]' || e instanceof Error;
 
 const decorateErrorStack = (err) => {
   if (!(isError(err) && err.stack) ||
-      getHiddenValue(err, kDecoratedPrivateSymbolIndex) === true) {
+    getHiddenValue(err, kDecoratedPrivateSymbolIndex) === true) {
     return;
   }
 
@@ -51,6 +50,16 @@ const inspect = (val) => {
 
 (async () => {
   let result;
+
+  let data = process.argv[2];
+  if (!data) { // if no argument, read from stdin
+    data = '';
+    for await (const chunk of process.stdin) {
+      data += chunk;
+    }
+  }
+
+  const { environment, code, timeout } = JSON.parse(data);
 
   try {
     if (environment.startsWith('node')) {
