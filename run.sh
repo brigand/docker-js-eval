@@ -11,4 +11,4 @@ node \
   --experimental-vm-modules \
   --experimental-modules \
   --no-warnings \
-  run.js "$(cat -)" 2>&1
+  run.js "$@" 2>&1
