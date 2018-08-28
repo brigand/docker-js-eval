@@ -3,7 +3,7 @@
 const { Script, SourceTextModule, createContext } = require('vm');
 const util = require('util');
 const fs = require('fs');
-const repl = require('module').builtinModules.filter(a => !/[_/]/.test(a));
+const builtinModules = require('module').builtinModules.filter(a => !/[_/]/.test(a));
 
 const {
   getHiddenValue,
@@ -76,7 +76,7 @@ const inspect = (val) => {
         global.exports = exports;
         global.__dirname = __dirname;
         global.__filename = __filename;
-        for (const name of repl._builtinLibs) {
+        for (const name of builtinModules) {
           Object.defineProperty(global, name, {
             get: () => {
               delete global[name];
