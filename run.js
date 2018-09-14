@@ -2,7 +2,6 @@
 
 const { Script, SourceTextModule, createContext } = require('vm');
 const util = require('util');
-const fs = require('fs');
 const builtinModules = require('module').builtinModules.filter(a => !/[_/]/.test(a));
 
 const {
@@ -44,7 +43,7 @@ const inspect = (val) => {
       colors: false,
       compact: false,
     });
-  } catch (err) {
+  } catch {
     return '';
   }
 };
@@ -60,7 +59,7 @@ const inspect = (val) => {
     }
   }
 
-  const { environment, code, timeout } = JSON.parse(data);
+  const { environment = 'node-cjs', code, timeout } = JSON.parse(data);
 
   try {
     if (environment.startsWith('node')) {
@@ -77,15 +76,23 @@ const inspect = (val) => {
         global.__dirname = __dirname;
         global.__filename = __filename;
         for (const name of builtinModules) {
+          const setReal = (val) => {
+            delete global[name];
+            global[name] = val;
+          };
           Object.defineProperty(global, name, {
             get: () => {
+              const lib = require(name);
               delete global[name];
-              return require(name);
+              Object.defineProperty(global, name, {
+                get: () => lib,
+                set: setReal,
+                configurable: true,
+                enumerable: false,
+              });
+              return lib;
             },
-            set: val => {
-              delete global[name];
-              global[name] = val;
-            },
+            set: setReal,
             configurable: true,
             enumerable: false,
           });
@@ -117,5 +124,6 @@ const inspect = (val) => {
     decorateErrorStack(error);
     [result] = inspect(error).split(/at new (Script|Module)/);
     process.stdout.write(result.trim());
+    process.exit(1);
   }
 })();

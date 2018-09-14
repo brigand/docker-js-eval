@@ -1,6 +1,6 @@
 # js-eval
 ```sh
-$ docker run -i js-eval <<<'{ "environment": "node-cjs", "code": "1 + 1" }'
+$ docker run --rm -i js-eval <<<'{ "environment": "node-cjs", "code": "1 + 1" }'
 2
 ```
 

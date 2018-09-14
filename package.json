@@ -15,6 +15,7 @@
   "homepage": "https://github.com/devsnek/docker-js-eval#readme",
   "dependencies": {},
   "scripts": {
+    "build": "docker build -t devsnek/js-eval:latest . && docker push devsnek/js-eval",
     "test": "node test"
   }
 }
