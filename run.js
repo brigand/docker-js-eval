@@ -2,7 +2,7 @@
 
 const { Script, SourceTextModule, createContext } = require('vm');
 const util = require('util');
-const builtinModules = require('module').builtinModules.filter(a => !/[_/]/.test(a));
+const builtinModules = require('module').builtinModules.filter((a) => !/[_/]/.test(a));
 
 const {
   getHiddenValue,
@@ -48,7 +48,7 @@ const inspect = (val) => {
   }
 };
 
-const run = async ({ environment = 'node-cjs', code, timeout }) => {
+const run = async (environment, code, timeout) => {
   if (environment === 'node-cjs') {
     const script = new Script(code, {
       filename: FILENAME,
@@ -104,6 +104,8 @@ const run = async ({ environment = 'node-cjs', code, timeout }) => {
     });
     return script.runInContext(createNewContext());
   }
+
+  throw new RangeError(`Invalid environment: ${environment}`);
 };
 
 if (!module.parent) {
@@ -116,7 +118,8 @@ if (!module.parent) {
       }
     }
     try {
-      const result = await run(JSON.parse(data));
+      const { environment, code, timeout } = JSON.parse(data);
+      const result = await run(environment, code, timeout);
       process.stdout.write(inspect(result));
     } catch (error) {
       decorateErrorStack(error);
@@ -125,6 +128,6 @@ if (!module.parent) {
       process.exit(1);
     }
   })();
-};
+}
 
 module.exports = run;
