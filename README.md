@@ -7,7 +7,7 @@ $ docker run --rm -i js-eval <<<'{ "environment": "node-cjs", "code": "1 + 1" }'
 ```js
 const run = require('docker-js-eval');
 
-run('1 + 1', 'node-cjs', { memory: '8m' }).then(console.log) // 2
+run('1 + 1', { memory: '8m' }).then(console.log) // 2
 ```
 
 Environments:

@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const CONTAINER = 'devsnek/js-eval';
 
-module.exports = (code, environment, { timeout, cpus, memory, net = 'none' } = {}) =>
+module.exports = (code, { environment, timeout, cpus, memory, net = 'none' } = {}) =>
   new Promise((resolve, reject) => {
     const name = `jseval-${crypto.randomBytes(8).toString('hex')}`;
 

@@ -1,12 +1,28 @@
-const cp = require('child_process');
-const assert = require('assert');
+const { execSync } = require('child_process');
+const { equal } = require('assert');
+const run = require('./run');
+const runInDocker = require('./index');
 
-console.log('environment: script and node-cjs should work');
+const jsEval = code => runInDocker(code, { timeout: 5000 });
 
-assert.equal(cp.execSync(`echo '{"environment":"script", "code": "2+2"}' | node --no-warnings run`) + '', '4');
-assert.equal(cp.execSync(`node --no-warnings run '{"environment":"node-cjs", "code": "2+2"}'`) + '', '4');
+console.log('building image..')
+execSync(`docker build -t devsnek/js-eval:latest .`);
 
+(async () => {
 
-console.log('environment: node-cjs should have core module available globally');
+  equal(await run({ code: '1 + 1' }), '2');
+  console.log('✔️ run.js works');
 
-assert.equal(cp.execSync(`node --no-warnings run '{"environment":"node-cjs", "code": "console.assert(fs.writeFile); console.assert(fs.readFile); 1"}'`) + '', '1');
+  equal(await run({ code: 'console.assert(fs.writeFile); console.assert(fs.readFile); 1' }), '1');
+  console.log('✔️ exposes core node.js modules');
+
+  equal(execSync(`echo '{"environment":"script", "code": "2+2"}' | node --no-warnings run`) + '', '4');
+  equal(execSync(`node --no-warnings run '{"environment":"node-cjs", "code": "2+2"}'`) + '', '4');
+  console.log('✔️ works from command-line');
+
+  equal(await jsEval('2+3'), '5');
+  const err = await jsEval('1 ++ 1');
+  equal(err + '', 'ecmabot.js:1\n1 ++ 1\n^\n\nReferenceError: Invalid left-hand side expression in postfix operation')
+  console.log('✔️ works from docker');
+})()
+
