@@ -14,7 +14,7 @@ execSync('docker build -t devsnek/js-eval:latest .');
   equal(await run('node-cjs', '1 + 1'), '2');
   console.log('✔️ run.js works');
 
-  equal(await run('node-cjs', 'console.assert(fs.writeFile); console.assert(fs.readFile); 1'), '1');
+  equal(await run('node-cjs', 'console.assert(fs.writeFile); console.assert(fs.readFile); console.assert(child_process.execSync); 1'), '1');
   console.log('✔️ exposes core node.js modules');
 
   equal(`${execSync('echo \'{"environment":"script", "code": "2+2"}\' | node --no-warnings run')}`, '4');

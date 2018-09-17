@@ -2,7 +2,7 @@
 
 const { Script, SourceTextModule, createContext } = require('vm');
 const util = require('util');
-const builtinModules = require('module').builtinModules.filter((a) => !/[_/]/.test(a));
+const builtinModules = require('module').builtinModules.filter((a) => !/^_|\//.test(a));
 
 const {
   getHiddenValue,
