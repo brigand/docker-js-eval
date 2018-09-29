@@ -1,21 +1,18 @@
 {
   "name": "docker-js-eval",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Evaluate JS in a Docker container",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/devsnek/docker-js-eval.git"
-  },
+  "repository": "github:brigand/docker-js-eval",
   "author": "snek <me@gus.host>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/devsnek/docker-js-eval/issues"
+    "url": "https://github.com/brigand/docker-js-eval/issues"
   },
-  "homepage": "https://github.com/devsnek/docker-js-eval#readme",
+  "homepage": "https://github.com/brigand/docker-js-eval#readme",
   "dependencies": {},
   "scripts": {
-    "build": "docker build -t devsnek/js-eval:latest . && docker push devsnek/js-eval",
+    "build": "docker build -t brigand/js-eval:latest -t brigand/js-eval:$(jq -r .version package.json) . && docker push brigand/js-eval",
     "test": "node test"
   }
 }

@@ -38,22 +38,21 @@ const createNewContext = () => {
 const inspect = (val) => {
   try {
     return util.inspect(val, {
+      depth: 3,
       maxArrayLength: 20,
-      breakLength: 9999,
+      breakLength: Infinity,
       colors: false,
-      compact: false,
+      compact: true,
     });
   } catch {
     return '';
   }
 };
 
-const run = async (environment, code, timeout) => {
+const run = async (code, environment, timeout) => {
   if (environment === 'node-cjs') {
     const script = new Script(code, {
       filename: FILENAME,
-      timeout,
-      displayErrors: true,
     });
     global.module = module;
     global.require = require;
@@ -82,7 +81,10 @@ const run = async (environment, code, timeout) => {
         enumerable: false,
       });
     }
-    return script.runInThisContext();
+    return script.runInThisContext({
+      timeout,
+      displayErrors: true,
+    });
   }
   if (environment === 'module') {
     const module = new SourceTextModule(code, {
@@ -102,7 +104,10 @@ const run = async (environment, code, timeout) => {
       timeout,
       displayErrors: true,
     });
-    return script.runInContext(createNewContext());
+    return script.runInContext(createNewContext(), {
+      timeout,
+      displayErrors: true,
+    });
   }
 
   throw new RangeError(`Invalid environment: ${environment}`);
@@ -110,16 +115,15 @@ const run = async (environment, code, timeout) => {
 
 if (!module.parent) {
   (async () => {
-    let data = process.argv[2];
-    if (!data) { // if no argument, read from stdin
-      data = '';
+    let code = process.argv[2];
+    if (!code) { // if no argument, read from stdin
+      code = '';
       for await (const chunk of process.stdin) {
-        data += chunk;
+        code += chunk;
       }
     }
     try {
-      const { environment, code, timeout } = JSON.parse(data);
-      const result = await run(environment, code, timeout);
+      const result = await run(code, process.env.JSEVAL_ENV || 'node-cjs', +process.env.JSEVAL_TIMEOUT || undefined);
       process.stdout.write(inspect(result));
     } catch (error) {
       decorateErrorStack(error);

@@ -1,6 +1,6 @@
 # js-eval
 ```sh
-$ docker run --rm -i js-eval <<<'{ "environment": "node-cjs", "code": "1 + 1" }'
+$ docker run --rm -i js-eval <<<'1 + 1'
 2
 ```
 
@@ -10,8 +10,8 @@ const run = require('docker-js-eval');
 run('1 + 1', { memory: '8m' }).then(console.log) // 2
 ```
 
-Environments:
-- `node-cjs`
+Environments (passed with `JSEVAL_ENV` environment variable):
+- `node-cjs` (default)
   Like evaluating a normal Node.js CommonJS module
 - `node-esm`
   Coming soon
