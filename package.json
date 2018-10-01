@@ -1,25 +1,18 @@
 {
   "name": "docker-js-eval",
-  "version": "0.1.0",
-  "description": "Run bits of js code in various JS engines, within the safety of a docker container.  See usage.sh for an example with restricted memory, cpu, and network disabled.",
-  "main": "eval-js.js",
-  "dependencies": {
-    "babel-polyfill": "^6.22.0",
-    "babel-standalone": "^6.22.1",
-    "object-inspect": "^1.1.0"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/brigand/docker-js-eval.git"
-  },
-  "author": "Frankie Bagnardi <f.bagnardi@gmail.com>",
+  "version": "1.0.0",
+  "description": "Evaluate JS in a Docker container",
+  "main": "index.js",
+  "repository": "github:brigand/docker-js-eval",
+  "author": "snek <me@gus.host>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/brigand/docker-js-eval/issues"
   },
-  "homepage": "https://github.com/brigand/docker-js-eval#readme"
+  "homepage": "https://github.com/brigand/docker-js-eval#readme",
+  "dependencies": {},
+  "scripts": {
+    "build": "docker build -t brigand/js-eval:latest -t brigand/js-eval:$(jq -r .version package.json) . && docker push brigand/js-eval",
+    "test": "node test"
+  }
 }
