@@ -6,7 +6,7 @@ const run = require('./run');
 const jsEval = require('./index');
 
 console.log('building image..');
-execSync('docker build -t devsnek/js-eval:latest .');
+execSync('docker build -t brigand/js-eval:latest .');
 
 (async () => {
   equal(await run('({x: 1 + 1 + "!"})', 'node-cjs'), { x: '2!' });

@@ -2,7 +2,7 @@
 
 const cp = require('child_process');
 
-const CONTAINER = 'devsnek/js-eval';
+const CONTAINER = 'brigand/js-eval';
 
 class Output {
   constructor(stdout, err) {

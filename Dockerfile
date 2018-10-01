@@ -1,10 +1,8 @@
-FROM mhart/alpine-node
-LABEL author=me@gus.host
+FROM node:slim
 
-RUN adduser -D -s /bin/bash -h /var/ws anon
-COPY run.js /var/run/
+COPY run.js /run/
 WORKDIR /var/ws
-USER anon
+USER node
 
 CMD ["node", \
   "--harmony-bigint", \
@@ -17,4 +15,4 @@ CMD ["node", \
   "--experimental-vm-modules", \
   "--experimental-modules", \
   "--no-warnings", \
-  "/var/run/run.js"]
+  "/run/run.js"]
