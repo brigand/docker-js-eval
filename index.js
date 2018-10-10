@@ -1,46 +1,51 @@
 'use strict';
 
 const cp = require('child_process');
+const crypto = require('crypto');
 
 const CONTAINER = 'brigand/js-eval';
 
-class Output {
-  constructor(stdout, err) {
-    this.stdout = stdout;
-    if (err) {
-      this.killed = err.killed;
-      this.code = err.code;
-      this.signal = err.signal;
-    }
-  }
-  toString() {
-    return this.stdout;
-  }
-}
-
 module.exports = (code, { environment = 'node-cjs', timeout, cpus, memory, net = 'none' } = {}) =>
   new Promise((resolve, reject) => {
-    let cmd = `docker run --rm -i -ljseval --net=${net} -eJSEVAL_ENV=${environment}`;
+    const name = `jseval-${crypto.randomBytes(8).toString('hex')}`;
+    const args = ['run', '--rm', '-i', `--name=${name}`, `--net=${net}`, `-eJSEVAL_ENV=${environment}`];
     if (timeout) {
-      cmd += ` -eJSEVAL_TIMEOUT=${timeout}`;
+      args.push(`-eJSEVAL_TIMEOUT=${timeout}`);
     }
     if (cpus) {
-      cmd += ` --cpus=${cpus}`;
+      args.push(`--cpus=${cpus}`);
     }
     if (memory) {
-      cmd += ` -m=${memory}`;
+      args.push(`-m=${memory}`);
     }
 
-    cmd += ` ${CONTAINER}`;
+    args.push(CONTAINER);
 
-    // also pass timeout to cp.exec in case, with +100ms to let the internal timeout does its job first
-    const proc = cp.exec(cmd, { timeout: timeout ? (+timeout + 100) : undefined }, (err, stdout) => {
-      if (err) {
-        proc.kill();
-        return reject(new Output(stdout, err));
-      }
-      resolve(new Output(stdout));
-    });
+    const proc = cp.spawn('docker', args);
     proc.stdin.write(code);
     proc.stdin.end();
+
+    let timer;
+    if (timeout) {
+      timer = setTimeout(() => {
+        cp.exec(`docker kill ${name}`, () => {
+          reject(new Error(`(timeout) ${data}`));
+        });
+      }, timeout + 200);
+    }
+
+    let data = '';
+    proc.stdout.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    proc.on('error', (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
+
+    proc.on('exit', () => {
+      clearTimeout(timer);
+      resolve(data);
+    });
   });

@@ -1,12 +1,12 @@
 'use strict';
 
 const { execSync } = require('child_process');
-const { deepEqual: equal } = require('assert');
+const { deepEqual: equal, ok } = require('assert');
 const run = require('./run');
 const jsEval = require('./index');
 
 console.log('building image..');
-execSync('docker build -t brigand/js-eval:latest .');
+execSync('./build');
 
 (async () => {
   equal(await run('({x: 1 + 1 + "!"})', 'node-cjs'), { x: '2!' });
@@ -31,11 +31,12 @@ execSync('docker build -t brigand/js-eval:latest .');
     equal(err + '', 'ecmabot.js:1\n1 ++ 1\n^\n\nReferenceError: Invalid left-hand side expression in postfix operation');
   }
   try {
-    await jsEval('setTimeout(console.log, 1000, 2); 1;', { timeout: 500 });
+    await jsEval('setTimeout(console.log, 5000, 2); 1;', { timeout: 4000 });
+    ok(false);
   } catch (err) {
-    equal(err.killed, true);
-    equal(err + '', '1');
+    equal(err + '', 'Error: (timeout) 1');
   }
+  equal(execSync('docker ps -f name=jseval --format "{{json .}}"') + '', '');
   console.log('✔️ works from docker');
 })()
   .catch(e => console.error('ERR!', e))

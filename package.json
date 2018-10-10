@@ -12,7 +12,6 @@
   "homepage": "https://github.com/brigand/docker-js-eval#readme",
   "dependencies": {},
   "scripts": {
-    "build": "docker build -t brigand/js-eval:latest -t brigand/js-eval:$(jq -r .version package.json) . && docker push brigand/js-eval",
     "test": "node test"
   }
 }
