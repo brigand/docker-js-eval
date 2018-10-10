@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# get version, only major, it looks better in docker tags
+v=$(jq -r .version package.json)
+v="${v%%.*}"
+
+echo "Building brigand/js-eval:$v .."
+
+# main image
+docker build -t brigand/js-eval:latest -t brigand/js-eval:$v . -f-<<EOF
+FROM node
+
+COPY run.js /run/
+WORKDIR /home/node
+USER node
+
+CMD ["node", "--no-warnings", "/run/run.js"]
+EOF
+
+# harmony image
+docker build -t brigand/js-eval:harmony-$v . -f-<<EOF
+FROM node
+
+COPY run.js /run/
+WORKDIR /home/node
+USER node
+
+CMD ["node", \
+  "--harmony-bigint", \
+  "--harmony-class-fields", \
+  "--harmony-private-fields", \
+  "--harmony-static-fields", \
+  "--harmony-public-fields", \
+  "--harmony-regexp-named-captures", \
+  "--harmony-do-expressions", \
+  "--experimental-vm-modules", \
+  "--experimental-modules", \
+  "--no-warnings", \
+  "/run/run.js"]
+EOF
+
+if [[ $1 ]]; then
+  docker push brigand/js-eval
+fi
